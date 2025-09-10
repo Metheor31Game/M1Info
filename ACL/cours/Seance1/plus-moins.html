@@ -1,0 +1,81 @@
+!-- plus-moins.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Jeu du plus ou moins</title>
+</head>
+<body>
+<script src="./plus-moins.js"></script>
+</body>
+</html>
+
+
+<script>
+    function randInt(from, to) {
+        if (to === undefined) {
+            to = from;
+            from = 0;
+        }
+        return Math.round(Math.random()*to + from);
+    }
+
+    function demarrerPartie(max) {
+        let gagne = false;
+        let nombre = randInt(max);
+        let min = 0;
+        let nbessais = 0;
+        while (!gagne) {
+            let choix = prompt(`Choisissez un nombre entre ${min} et ${max}`);
+            if (choix === null) {
+                if (confirm("vous êtes sur de vouloir quitter ?")) {
+                    break;
+                }
+            } else if (isNaN(choix) || choix.trim() === "") {
+                alert("Entrée invalide : veuillez entrer un nombre.");
+                continue; // ne pas incrémenter nbessais
+            } else if (Number(choix) == nombre) {
+                gagne = true;
+            } else if (Number(choix) < nombre) {
+                min = Number(choix);
+                alert("c'est plus !");
+            } else if (Number(choix) > nombre) {
+                max = Number(choix);
+                alert("c'est moins !");
+            }
+            nbessais++;
+        }
+        if (gagne){
+            alert(`c'est gagné ! nombre d'essais : ${nbessais}`);
+        }
+    }
+
+    function test(val) {
+        test1 = !!val == val;
+        test2 = !(!val || !val) == (val && val);
+        test3 = !(!val || !val) === (val && val);
+        return `!!val == val renvoie ${test1} \n !(!val || !val) == (val && val) renvoie ${test2} !(!val || !val) === (val && val) renvoie ${test3}`;
+    }
+
+    function forRange(i, j, process) {
+        if (i > j) {
+            return;
+        }
+        else {
+            process(i);
+            forRange(i + 1, j, process);
+        }
+    }
+
+    function forStep(val, pred, process, next) {
+        if (!pred(val)) {
+            return;
+        }
+        else {
+            process(val);
+            forStep(next(val), pred, process, next);
+        }
+    }
+
+
+</script>
