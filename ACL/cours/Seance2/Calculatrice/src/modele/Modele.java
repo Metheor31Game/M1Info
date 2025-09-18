@@ -1,13 +1,18 @@
 package modele;
 
-import library.Converter;
+import java.util.ArrayList;
 
-public class Modele {
+import library.Converter;
+import library.Observable;
+import library.Observer;
+
+public class Modele implements Observable{
     private String expression;
     private int resultat;
     private int premierNombre;
     private int secondNombre;
     private String dernierOp;
+    private ArrayList<Observer> observateurs;
 
     public Modele() {
         this.expression = "";
@@ -15,6 +20,7 @@ public class Modele {
         this.secondNombre = -1;
         this.dernierOp = "";
         this.resultat = 0;
+        this.observateurs = new ArrayList<>();
     }
 
     //Ajouter le dernier chiffre a l'expression globale
@@ -42,6 +48,9 @@ public class Modele {
     //Ajouter la derniere operation a l'expression globale
     public void ajouterOp(String op) {
         StringBuilder builder = new StringBuilder(this.expression);
+        if(this.premierNombre != -1 && this.secondNombre != -1) {
+            this.executer();
+        }
         builder.append(op);
         this.expression = builder.toString();
         this.dernierOp = op;
@@ -65,21 +74,42 @@ public class Modele {
             default:
                 break;
         }
-        this.premierNombre = -1;
+        this.premierNombre = resultat;
         this.secondNombre = -1;
         this.dernierOp = "";
         
         //Ajouter le resultat a l'expression;
         StringBuilder builder = new StringBuilder(this.expression);
+        builder.append("=");
         builder.append(resultat);
         this.expression = builder.toString();
 
+        System.out.println("Resultat : " + resultat);
+        System.out.println("Expression : " + this.expression);
+        this.notifyObservers();
         return this.resultat;
     }
 
 
     public String getExpression() {
         return this.expression;
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        this.observateurs.add(o);    
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        this.observateurs.remove(o);    
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer o: observateurs) {
+            o.update(this.expression);
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package calculatrice;
 
+import controleur.Controleur;
+import modele.Modele;
 import view.ClasicViewDigit;
 
 /**
@@ -13,6 +15,11 @@ public class Calculatrice {
      */
     public static void main(String[] args) {
         ClasicViewDigit guid = new ClasicViewDigit();
+        Modele m = new Modele();
+        Controleur c = new Controleur(m);
+        guid.ajouterControleur(c);
+        m.addObserver(guid);
+
 
         
     }

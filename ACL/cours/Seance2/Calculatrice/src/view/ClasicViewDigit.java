@@ -10,19 +10,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import controleur.Controleur;
 import library.Converter;
+import library.Observer;
 
-public class ClasicViewDigit {
+
+public class ClasicViewDigit implements Observer{
 
     private final JFrame frame = new JFrame("Calculator");
+    private int resultat = 0;
     private final JPanel[] panels = new JPanel[6];
     private final JTextField textField = new JTextField();
     private final JButton[] numberButtons = new JButton[10];
     private final JButton subtractButton = new JButton("-");
     private final JButton addButton = new JButton("+");
     private final JButton equateButton = new JButton(" = ");
+    private Controleur controleur;
+    private String currentExp;
 
     public ClasicViewDigit() {
+        this.currentExp = "";
         buildFrame();
     }
 
@@ -85,10 +92,34 @@ public class ClasicViewDigit {
         for (JPanel jPanel : panels) {
             contentPane.add(jPanel);
         }
-
+        
         frame.pack();
         frame.setVisible(true);
     }
+    
+    public void ajouterControleur(Controleur controleur) {
+        this.controleur = controleur;
+    }
+    
+    @Override
+    public void update(String chaine) {
+        // Extraire le dernier nombre de la chaîne (après le dernier opérateur)
+        String[] parts = chaine.split("[\\+\\-\\*/=]");
+        String fin = parts[parts.length - 1].trim();
+        try {
+            resultat = Integer.parseInt(fin);
+        } catch (NumberFormatException e) {
+            resultat = 0;
+        }
+        majBarre(resultat);
+    }
+
+    // Met à jour la barre de la fenêtre avec le résultat
+    public void majBarre(int resultat) {
+        this.currentExp = String.valueOf(resultat);
+        textField.setText(String.valueOf(resultat));
+    }
+
 
     /**
      * Controller for the operation keys
@@ -103,6 +134,9 @@ public class ClasicViewDigit {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("op: " + op);
+            ClasicViewDigit.this.currentExp = ClasicViewDigit.this.currentExp + Converter.op2String(op);
+            textField.setText(ClasicViewDigit.this.currentExp);
+            controleur.recevoirOp(op);
         }
     }
 
@@ -120,6 +154,10 @@ public class ClasicViewDigit {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("digit: " + digit);
+            ClasicViewDigit.this.currentExp = ClasicViewDigit.this.currentExp + String.valueOf(digit);
+            textField.setText(ClasicViewDigit.this.currentExp);
+            controleur.recevoirNombre(digit);
         }
     }
+
 }
