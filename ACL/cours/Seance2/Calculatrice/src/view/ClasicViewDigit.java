@@ -17,19 +17,25 @@ import library.Observer;
 
 public class ClasicViewDigit implements Observer{
 
-    private final JFrame frame = new JFrame("Calculator");
+    private final JFrame frame = new JFrame("Calculatrice");
     private int resultat = 0;
     private final JPanel[] panels = new JPanel[6];
     private final JTextField textField = new JTextField();
     private final JButton[] numberButtons = new JButton[10];
     private final JButton subtractButton = new JButton("-");
     private final JButton addButton = new JButton("+");
+    private final JButton multiplyButton = new JButton("*");
+    private final JButton divideButton = new JButton("/");
     private final JButton equateButton = new JButton(" = ");
     private Controleur controleur;
     private String currentExp;
+    private HList hlist;
+    private VList vlist;
 
     public ClasicViewDigit() {
         this.currentExp = "";
+        this.hlist = new HList();
+        this.vlist = new VList();
         buildFrame();
     }
 
@@ -67,6 +73,8 @@ public class ClasicViewDigit implements Observer{
         panels[1].add(numberButtons[9]);
         panels[1].add(addButton);
         addButton.addActionListener(new OpListener(Converter.PLUS));
+        panels[1].add(multiplyButton);
+        multiplyButton.addActionListener(new OpListener(Converter.TIMES));
 
         // layout = FlowLayout.LEFT
         panels[2].setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -75,6 +83,8 @@ public class ClasicViewDigit implements Observer{
         panels[2].add(numberButtons[6]);
         panels[2].add(subtractButton);
         subtractButton.addActionListener(new OpListener(Converter.MINUS));
+        panels[2].add(divideButton);
+        divideButton.addActionListener(new OpListener(Converter.DIV));
 
         // layout = FlowLayout.LEFT
         panels[3].setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -112,6 +122,8 @@ public class ClasicViewDigit implements Observer{
             resultat = 0;
         }
         majBarre(resultat);
+        this.hlist.setText(chaine);
+        this.vlist.setText(chaine);
     }
 
     // Met à jour la barre de la fenêtre avec le résultat

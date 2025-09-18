@@ -2,7 +2,6 @@ package modele;
 
 import java.util.ArrayList;
 
-import library.Converter;
 import library.Observable;
 import library.Observer;
 
@@ -50,6 +49,7 @@ public class Modele implements Observable{
         StringBuilder builder = new StringBuilder(this.expression);
         if(this.premierNombre != -1 && this.secondNombre != -1) {
             this.executer();
+            this.dernierOp = op;
         }
         builder.append(op);
         this.expression = builder.toString();
