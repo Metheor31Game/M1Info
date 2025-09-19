@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP2</title>
+</head>
+<body>
+    <h1 style="text-align: center;">TP2</h1>
+</body>
+</html>
+
+<script>
+
+    //Exercice 1;
+    // const obj = {
+    //     a: 1,
+    //     b: { c: 2, d: 3 },
+    //     e: null,
+    //     f() {
+    //         console.log(this.a + this.b.c + this.b.d);
+    //     },
+    // };
+
+    
+    // //Première manière
+    // const obj2 = obj;
+    // console.log("premiere copie : " + obj2.a);
+
+    // function deepClone(ob) {        
+    //     let newObj = {};
+    //     if(typeof ob === "object" && ob !== null) {
+    //         for (let key in ob) {
+    //             if (ob[key] == ob) {
+    //                 return ob;
+    //             }
+    //             if (ob[key] && typeof ob[key] === "object") {
+    //                 newObj[key] = deepClone(ob[key]);
+    //             } else {
+    //                 newObj[key] = ob[key];
+    //             }
+    //         }
+    //     }
+    //     return ob;
+    //     return newObj;
+
+    // }
+
+    // const obj3 = deepClone(obj)
+    // console.log("seconde copie : " + obj3.b.c + " + " + obj.f)
+
+    // delete obj3.b.c;
+    // console.log("seconde copie : " + obj3.b.c + " + " + obj.f)
+
+
+    // const circularObj = {};
+    // circularObj.autoRef = circularObj;
+    // deepClone(circularObj);
+
+
+
+    //Exercice 2
+
+    function List() {
+        this.head = null;
+        this.isEmpty = () => {
+            return this.head == null;
+        };
+        this.add = (v) => {
+            const maillon = {value: v, next: this.head};
+            this.head = maillon;
+        };
+        this.get = (i) => {
+            if (typeof i !== 'number' || i < 0 || !Number.isInteger(i)) {
+                return undefined;
+            }
+            let current = this.head;
+            let idx = 0;
+            while (current && idx < i) {
+                current = current.next;
+                idx++;
+            }
+            return current ? current.value : undefined;
+        };
+    }
+
+    const l = new List();
+    console.log(l.isEmpty()); // true
+    l.add(3);
+    l.add(2);
+    l.add(1);
+    console.log(l.isEmpty()); // false
+    console.log(l.get(0), l.get(1), l.get(2)); // 1, 2, 3
+    console.log(l.get(-1), l.get(3), l.get(null));
+
+
+
+</script>
