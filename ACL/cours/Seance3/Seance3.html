@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seance 3</title>
+  </head>
+  <body></body>
+  <body>
+    <h1 style="text-align: center">Séance 3 : POO</h1>
+  </body>
+</html>
+
+<script>
+  class Point {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+  }
+  const point = new Point(2, 3);
+  console.log("coordonnées : ", point.x, point.y);
+
+  class Vecteur {
+    constructor(arg1, arg2) {
+      if (typeof arg1 === "number" && typeof arg2 === "number") {
+        // Cas où on passe directement les coordonnées
+        this.x = arg1;
+        this.y = arg2;
+      } else if (arg1 instanceof Point && arg2 instanceof Point) {
+        // Cas où on passe deux points
+        this.x = arg2.x - arg1.x;
+        this.y = arg2.y - arg1.y;
+      } else {
+        // Cas d'arguments incohérents
+        throw new Error("Arguments incohérents pour construire un vecteur");
+      }
+    }
+
+    determinant(v) {
+      return this.x * v.y - this.y * v.x;
+    }
+
+    static position(a, b, c) {
+      const ab = new Vecteur(a, b); // Vecteur AB
+      const ac = new Vecteur(a, c); // Vecteur AC
+      return ab.determinant(ac); // Renvoie le déterminant de AB et AC
+    }
+  }
+
+  // const v1 = new Vecteur(1, 2); // le vecteur de coordonnées (1, -1)
+  // const v2 = new Vecteur(1, 1);
+  // console.log("v1 : ", v1);
+  // console.log("v2 : ", v2);
+
+  // console.log("det(v1, v2) = ", v1.determinant(v2));
+
+  // const a = new Point(1, 1);
+  // const b = new Point(0, 0);
+  // const c = new Point(1, 0);
+  // console.log(Vecteur.position(a, b, c) > 0); // true
+  // console.log(Vecteur.position(b, a, c) < 0); // true
+  // console.log(Vecteur.position(a, b, b) == 0); // true
+
+  class Segment {
+    constructor(p1, p2) {
+      this.p1 = p1;
+      this.p2 = p2;
+    }
+
+    intersecte(s) {
+      const d1 = Vecteur.position(this.p1, this.p2, s.p1);
+      const d2 = Vecteur.position(this.p1, this.p2, s.p2);
+      const d3 = Vecteur.position(s.p1, s.p2, this.p1);
+      const d4 = Vecteur.position(s.p1, s.p2, this.p2);
+
+      if (
+        ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+        ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
+      ) {
+        return true; // Les segments se coupent
+      }
+
+      return false; // Les segments ne se coupent pas
+    }
+  }
+
+  const a = new Point(0, 0);
+  const b = new Point(3, 0);
+  const c = new Point(2, -1);
+  const d = new Point(2, 1);
+  const e = new Point(1, 0);
+  const s1 = new Segment(a, b);
+  const s2 = new Segment(c, d);
+  const s3 = new Segment(a, e);
+  console.log("s1 intersecte s2 :", s1.intersecte(s2)); // true
+  console.log("s1 intersecte s3 :", s1.intersecte(s3)); // false
+</script>
