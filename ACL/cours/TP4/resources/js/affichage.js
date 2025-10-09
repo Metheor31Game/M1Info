@@ -1,5 +1,26 @@
+/**
+ * Met à jour l'affichage du formulaire avec les données du personnage.
+ *
+ * @param {Personnage} personnage - Instance du modèle Personnage à afficher.
+ * Remplit les champs nom, univers, classe, attributs et compétences.
+ * Désactive les cases à cocher des compétences fixes.
+ */
 function afficher(personnage) {
-  console.log("Affichage du personnage :", personnage);
+  // Indicateur attributs
+  const indicateurAttributs = document.getElementById("enteteAttributs");
+  if (indicateurAttributs) {
+    const N = personnage.getSommeAttributs();
+    const K = 9;
+    indicateurAttributs.textContent = `Attributs : ${N}/${K}`;
+  }
+
+  // Indicateur compétences
+  const indicateurCompetences = document.getElementById("enteteCompetences");
+  if (indicateurCompetences) {
+    const N = personnage.getNbCompetencesSelectionnees();
+    const K = personnage.getNbCompetencesAChoisir();
+    indicateurCompetences.textContent = `Compétences : ${N}/${K}`;
+  }
   // Champ nom
   const inputNom = document.getElementById("nom");
   if (inputNom) inputNom.value = personnage.nom ?? "";

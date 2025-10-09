@@ -6,6 +6,13 @@ import {
   getUnivers,
 } from "./univers.js";
 
+/**
+ * Initialise le formulaire selon l'univers sélectionné.
+ * Remplit dynamiquement les champs univers, classe, attributs et compétences.
+ * Utilisé au chargement de la page et lors du changement d'univers.
+ *
+ * @param {string} nomUniv - Nom de l'univers à afficher (par défaut "Médiéval fantastique").
+ */
 function initialiser(nomUniv = "Médiéval fantastique") {
   const CurrentUnivers = getUnivers(nomUniv);
 

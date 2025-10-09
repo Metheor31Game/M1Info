@@ -6,7 +6,7 @@ import { afficher } from "./affichage.js";
 initialiser();
 ajouterEcouteurs();
 
-// // Création d'une instance de test et affichage
+// // test
 // const personnageTest = new Personnage();
 // personnageTest.nom = "Testeur";
 // personnageTest.setUnivers("Médiéval fantastique");

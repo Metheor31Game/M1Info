@@ -1,6 +1,11 @@
 import { controleur } from "./controleur.js";
 import { initialiser } from "./initialisation.js";
+import { getClasse } from "./univers.js";
 
+/**
+ * Ajoute tous les écouteurs nécessaires sur les champs du formulaire.
+ * Empêche la modification des compétences fixes et la saisie de plus de 9 points d'attributs.
+ */
 function ajouterEcouteurs() {
   // Champ nom
   const inputNom = document.getElementById("nom");
@@ -49,7 +54,27 @@ function ajouterEcouteurs() {
     ulCompetences.addEventListener("change", function (e) {
       if (e.target && e.target.matches("input[type='checkbox']")) {
         const nomComp = e.target.id.replace("comp-", "");
+        // Vérifie si la compétence est fixe
+        let estFixe = false;
+        if (getClasse) {
+          const objetClasse = getClasse(controleur.personnage.classe);
+          if (objetClasse.competences.fixes) {
+            estFixe = objetClasse.competences.fixes.includes(nomComp);
+          }
+        }
+        if (estFixe) {
+          e.target.checked = true;
+          return;
+        }
+        // Empêche de cocher si le nombre max est atteint
         if (e.target.checked) {
+          const nbSelectionnees =
+            controleur.personnage.getNbCompetencesSelectionnees();
+          const nbMax = controleur.personnage.getNbCompetencesAChoisir();
+          if (nbSelectionnees >= nbMax) {
+            e.target.checked = false;
+            return;
+          }
           controleur.ajouterCompetence(nomComp);
         } else {
           controleur.retirerCompetence(nomComp);
