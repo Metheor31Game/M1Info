@@ -1,4 +1,5 @@
 import { readFile, stat, readdir } from "fs/promises";
+import mime from "mime";
 import { createServer } from "http";
 import path from "path";
 
@@ -30,7 +31,8 @@ const server = createServer(async (req, res) => {
         } else {
             // C'est un fichier : on l'envoie
             const data = await readFile(filePath);
-            res.writeHead(200, { 'Content-Type': 'application/octet-stream' });
+            const contentType = mime.getType(filePath) || 'application/octet-stream';
+            res.writeHead(200, { 'Content-Type': contentType });
             res.end(data);
         }
     } catch (err) {
