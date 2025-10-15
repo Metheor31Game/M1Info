@@ -11,11 +11,24 @@ public class Collegium implements FormationInterface{
     private List<FormationInterface> enfants; // disciplines
     private List<Module> modulesMutualises; // modules mutualisés au niveau du collégium
 
+    private FormationInterface parent = null;
+
     public Collegium(String nom, String contact, List<FormationInterface> enfants, List<Module> modulesMutualises) {
         this.nom = nom;
         this.contact = contact;
         this.enfants = enfants;
         this.modulesMutualises = modulesMutualises;
+        if (enfants != null) {
+            for (FormationInterface enfant : enfants) {
+                if (enfant instanceof classes.Discipline) {
+                    ((classes.Discipline) enfant).setParent(this);
+                }
+            }
+        }
+    }
+
+    public void setParent(FormationInterface parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -25,12 +38,17 @@ public class Collegium implements FormationInterface{
 
     @Override
     public String getContact() {
-        // Si le contact n'est pas défini, retourne null
-        return contact;
+        if (contact != null && !contact.isEmpty()) {
+            return contact;
+        }
+        if (parent != null) {
+            return parent.getContact();
+        }
+        return null;
     }
 
     @Override
-    public int getNombreUE() {
+    public String getNombreUE() {
         // Calcul du nombre d'UEs en évitant les doublons (mutualisation)
         java.util.Set<Module> uniqueModules = new java.util.HashSet<>();
         if (modulesMutualises != null) {
@@ -38,23 +56,18 @@ public class Collegium implements FormationInterface{
         }
         if (enfants != null) {
             for (FormationInterface enfant : enfants) {
-                List<Module> modules = enfant.getModules();
-                if (modules != null) {
-                    uniqueModules.addAll(modules);
+                Module module = enfant.getModule();
+                if (module != null) {
+                    uniqueModules.add(module);
                 }
             }
         }
-        return uniqueModules.size();
+        return String.valueOf(uniqueModules.size());
     }
 
     @Override
     public List<FormationInterface> getEnfants() {
         return enfants;
-    }
-
-    @Override
-    public List<Module> getModules() {
-        return modulesMutualises;
     }
 
     @Override
