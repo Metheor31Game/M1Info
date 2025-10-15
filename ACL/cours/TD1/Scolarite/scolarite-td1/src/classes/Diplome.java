@@ -26,26 +26,17 @@ public class Diplome implements FormationInterface {
 		this.parent = parent;
 	}
 
-	public void afficher(String prefix) {
+	public void afficher(String prefix, inerface.Calculateur calculateur) {
 		System.out.println(prefix + getNom() + " - Contact: " + (getContact() != null ? getContact() : "N/A") + ", nombre UEs: " + getNombreUE());
+		System.out.println(prefix + "Charge: " + calculateur.calculPonderation(this));
 		if (enfants != null) {
 			for (FormationInterface enfant : enfants) {
 				if (enfant != null) {
 					if (enfant instanceof Diplome) {
-						((Diplome) enfant).afficher(prefix + "  ");
+						((Diplome) enfant).afficher(prefix + "  ", calculateur);
 					} else if (enfant instanceof Semestre) {
 						Semestre s = (Semestre) enfant;
-						System.out.println(prefix + "  Semester " + s.getNom() + " (Contact: " + (s.getContact() != null ? s.getContact() : "N/A") + ")");
-						if (s.getModule() != null && s.getModule().UEs != null) {
-							System.out.print(prefix + "    Modules: [");
-							boolean first = true;
-							for (UE ue : s.getModule().UEs) {
-								if (!first) System.out.print(", ");
-								System.out.print(ue.nom);
-								first = false;
-							}
-							System.out.println("]");
-						}
+						s.afficher(prefix + "  ", calculateur);
 					} else {
 						System.out.println(prefix + "  " + enfant.getNom());
 					}

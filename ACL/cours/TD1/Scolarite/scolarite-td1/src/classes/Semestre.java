@@ -19,6 +19,21 @@ public class Semestre implements FormationInterface {
 		this.parent = parent;
 	}
 
+	public void afficher(String prefix, inerface.Calculateur calculateur) {
+		System.out.println(prefix + "Semester " + getNom() + " (Contact: " + (getContact() != null ? getContact() : "N/A") + ")");
+		if (getModule() != null && getModule().UEs != null) {
+			System.out.print(prefix + "  Modules: [");
+			boolean first = true;
+			for (classes.UE ue : getModule().UEs) {
+				if (!first) System.out.print(", ");
+				System.out.print(ue.nom);
+				first = false;
+			}
+			System.out.println("]");
+		}
+		System.out.println(prefix + "  Charge: " + calculateur.calculPonderation(this));
+	}
+
 	@Override
 	public String getNom() {
 		return nom;

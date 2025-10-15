@@ -1,11 +1,11 @@
 public class App {
     public static void main(String[] args) throws Exception {
-    // Création des UEs
-    classes.UE ue1 = new classes.UE("ACL");
-    classes.UE ue2 = new classes.UE("DP");
-    classes.UE ue3 = new classes.UE("IA");
-    classes.UE ue4 = new classes.UE("IHM");
-    classes.UE ue5 = new classes.UE("GLA");
+    // Création des UEs avec nombre d'heures CM, TD, TP
+    classes.UE ue1 = new classes.UE("ACL", 20, 15, 10);
+    classes.UE ue2 = new classes.UE("DP", 18, 12, 8);
+    classes.UE ue3 = new classes.UE("IA", 22, 14, 6);
+    classes.UE ue4 = new classes.UE("IHM", 16, 10, 12);
+    classes.UE ue5 = new classes.UE("GLA", 24, 16, 10);
 
     // Création des modules
     java.util.Set<classes.UE> s7UEs = new java.util.HashSet<>();
@@ -32,7 +32,14 @@ public class App {
     semestres.add(semestre9);
     classes.Diplome masterInfo = new classes.Diplome("Master Info", "HC", semestres);
 
-    // Test affichage
-    masterInfo.afficher("");
+    // Test affichage avec le calculateur théorique
+    System.out.println("Affichage avec calculateur théorique :");
+    inerface.Calculateur calculateurTheorique = new classes.CalculateurTheorique();
+    masterInfo.afficher("", calculateurTheorique);
+
+    // Test affichage avec le calculateur réel
+    System.out.println("\nAffichage avec calculateur réel :");
+    inerface.Calculateur calculateurReel = new classes.CalculateurReel();
+    masterInfo.afficher("", calculateurReel);
     }
 }
